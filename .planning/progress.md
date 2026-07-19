@@ -12,6 +12,15 @@
 
 ## 2026-07-19｜D2 技术 Gate 通过
 
+
+## 2026-07-19 - Decoder-only Transformer
+
+- 用户确认 learned absolute position embedding、logits-only forward 和 untied LM Head 设计。
+- 设计保存到 `docs/superpowers/specs/2026-07-19-decoder-only-transformer-design.md`。
+- 实现计划保存到 `docs/superpowers/plans/2026-07-19-decoder-only-transformer.md`。
+- TDD RED 1：测试因 `model.decoder` 不存在而收集失败。
+- TDD RED 2：创建组件空壳后，6 个行为测试因预期的 `NotImplementedError` 失败，1 个结构测试通过。
+- 错误记录：首个测试 patch hunk 行数错误导致 `git apply` 报 corrupt patch；重新核对行数后应用成功。测试正则改为 raw string，消除 invalid escape warning。
 - 新 Git 仓库初始化在 `d2-scaffold` feature branch；项目此前无 Git history，无法创建 worktree。
 - TDD RED：10 个测试因明确的 `NotImplementedError` 失败。
 - TDD GREEN：实现 `ModelConfig`、YAML loader、UTF-8 `ByteTokenizer` 和 next-token examples 后，10 tests passed。

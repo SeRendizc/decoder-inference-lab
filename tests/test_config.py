@@ -20,6 +20,7 @@ def test_load_smoke_config() -> None:
         dropout=0.0,
     )
     assert config.head_dim == 32
+    assert config.norm_eps == 1e-5
 
 
 def test_rejects_d_model_not_divisible_by_num_heads() -> None:
@@ -48,3 +49,15 @@ def test_rejects_non_positive_dimensions(field: str) -> None:
 
     with pytest.raises(ValueError, match=field):
         ModelConfig(**values)
+
+
+def test_rejects_non_positive_norm_eps() -> None:
+    with pytest.raises(ValueError, match="norm_eps"):
+        ModelConfig(
+            vocab_size=256,
+            max_seq_len=64,
+            d_model=128,
+            num_heads=4,
+            num_layers=2,
+            norm_eps=0.0,
+        )
