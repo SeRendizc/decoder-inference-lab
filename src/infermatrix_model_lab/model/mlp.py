@@ -20,12 +20,12 @@ class FeedForward(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # x: [B, T, D]
         hidden = self.up_proj(x)
-        #hidden: [B, T, hidden_dim]
+        # hidden: [B, T, hidden_dim]
 
         hidden = self.activation(hidden)
 
         out = self.down_proj(hidden)
-        #out: [B, T, D]
+        # out: [B, T, D]
 
         out = self.dropout(out)
 
