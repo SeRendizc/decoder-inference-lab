@@ -41,6 +41,34 @@ class IncrementModel(nn.Module):
         return logits
 
 
+class EosModel(nn.Module):
+    def __init__(
+        self,
+        vocab_size: int,
+        eos_token_id: int,
+    ) -> None:
+        super().__init__()
+        self.vocab_size = vocab_size
+        self.eos_token_id = eos_token_id
+
+    def forward(self, input_ids: torch.Tensor) -> torch.Tensor:
+        # input_ids: [B, T]
+        batch_size, sequence_length = input_ids.shape
+
+        logits = torch.full(
+            (
+                batch_size,
+                sequence_length,
+                self.vocab_size,
+            ),
+            fill_value=-1000.0,
+        )
+
+        logits[:, -1, self.eos_token_id] = 1000.0
+
+        return logits
+
+
 def test_generate_greedy_appends_predicted_tokens() -> None:
     model = IncrementModel(
         vocab_size=8,
@@ -79,3 +107,24 @@ def test_generate_greedy_respects_context_length() -> None:
         generated,
         torch.tensor([[0, 1, 2, 3, 4, 5, 6, 7]]),
     )
+
+
+def test_generate_greedy_stops_after_eos() -> None:
+    eos_token_id = 7
+    model = EosModel(
+        vocab_size=8,
+        eos_token_id=eos_token_id,
+    )
+    input_ids = torch.tensor([[1, 2]])
+
+    generated = generate_greedy(
+        model,
+        input_ids,
+        max_new_tokens=10,
+        max_seq_len=4,
+        eos_token_id=eos_token_id,
+    )
+
+    expected = torch.tensor([[1, 2, 7]])
+
+    assert torch.equal(generated, expected)

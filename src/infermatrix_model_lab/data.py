@@ -7,14 +7,29 @@ import torch
 
 class ByteTokenizer:
     @property
-    def vocab_size(self) -> int:
+    def eos_token_id(self) -> int:
         return 256
+
+    @property
+    def vocab_size(self) -> int:
+        return 257
 
     def encode(self, text: str) -> list[int]:
         return list(text.encode("utf-8"))
 
     def decode(self, token_ids: Sequence[int]) -> str:
-        return bytes(token_ids).decode("utf-8")
+        byte_ids = []
+
+        for token_id in token_ids:
+            if token_id == self.eos_token_id:
+                break
+
+            byte_ids.append(token_id)
+
+        return bytes(byte_ids).decode(
+            "utf-8",
+            errors="replace",
+        )
 
 
 def make_next_token_examples(

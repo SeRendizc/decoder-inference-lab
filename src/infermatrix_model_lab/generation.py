@@ -9,6 +9,7 @@ def generate_greedy(
     input_ids: torch.Tensor,
     max_new_tokens: int,
     max_seq_len: int,
+    eos_token_id: int | None = None,
 ) -> torch.Tensor:
     # input_ids: [B, T]
     generated = input_ids
@@ -31,5 +32,11 @@ def generate_greedy(
                 [generated, next_token],
                 dim=1,
             )
+
+            if (
+                eos_token_id is not None
+                and torch.all(next_token == eos_token_id)
+            ):
+                break
 
     return generated

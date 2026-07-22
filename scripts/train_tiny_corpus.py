@@ -4,6 +4,7 @@ import torch
 
 from infermatrix_model_lab.config import ModelConfig
 from infermatrix_model_lab.data import ByteTokenizer, make_next_token_examples
+from infermatrix_model_lab.generation import generate_greedy
 from infermatrix_model_lab.model.decoder import DecoderOnlyTransformer
 from infermatrix_model_lab.training.loss import NextTokenCrossEntropy
 from infermatrix_model_lab.training.overfit import overfit_tiny_batch
@@ -12,12 +13,16 @@ from infermatrix_model_lab.training.overfit import overfit_tiny_batch
 def main() -> None:
     torch.manual_seed(7)
 
-    text = "hello model lab\n" * 8
+    text = "hello model lab\n"
+    repetitions = 8
     sequence_length = 8
     steps = 200
 
     tokenizer = ByteTokenizer()
-    token_ids = tokenizer.encode(text)
+
+    sentence_token_ids = tokenizer.encode(text)
+
+    token_ids = (sentence_token_ids + [tokenizer.eos_token_id]) * repetitions
 
     input_ids, targets = make_next_token_examples(
         token_ids,
@@ -52,8 +57,9 @@ def main() -> None:
 
     initial_loss = losses[0]
     final_loss = losses[-1]
-
     reduction = (initial_loss - final_loss) / initial_loss * 100
+
+    print("\n---Basic Training---\n")
 
     print(f"initial loss: {initial_loss:.4f}")
     print(f"final loss:   {final_loss:.4f}")
@@ -68,14 +74,15 @@ def main() -> None:
     correct = predicted_ids == targets
     accuracy = correct.float().mean().item()
 
-    print(f"token accuracy: {accuracy:.2%}")
-
     sample_index = 0
 
     sample_input_ids = input_ids[sample_index].tolist()
     sample_target_ids = targets[sample_index].tolist()
     sample_predicted_ids = predicted_ids[sample_index].tolist()
 
+    print("\n---Basic Training Detailed Text---\n")
+
+    print(f"token accuracy: {accuracy:.2%}")
     print(f"input ids:      {sample_input_ids}")
     print(f"target ids:     {sample_target_ids}")
     print(f"predicted ids:  {sample_predicted_ids}")
@@ -83,6 +90,32 @@ def main() -> None:
     print(f"input text:     {tokenizer.decode(sample_input_ids)!r}")
     print(f"target text:    {tokenizer.decode(sample_target_ids)!r}")
     print(f"predicted text: {tokenizer.decode(sample_predicted_ids)!r}")
+
+    prompt = "hello mo"
+    prompt_token_ids = tokenizer.encode(prompt)
+
+    prompt_ids = torch.tensor(
+        [prompt_token_ids],
+        dtype=torch.long,
+    )
+
+    generated_ids = generate_greedy(
+        model,
+        prompt_ids,
+        max_new_tokens=32,
+        max_seq_len=config.max_seq_len,
+        eos_token_id=tokenizer.eos_token_id,
+    )
+
+    generated_token_ids = generated_ids[0].tolist()
+    generated_text = tokenizer.decode(generated_token_ids)
+
+    print("\n---Continuous Training---\n")
+
+    print(f"prompt:         {prompt!r}")
+    print(f"generated ids:  {generated_token_ids}")
+    print(f"generated text: {generated_text!r}")
+    print(f"ended with EOS: {generated_token_ids[-1] == tokenizer.eos_token_id}")
 
 
 if __name__ == "__main__":
