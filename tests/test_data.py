@@ -10,7 +10,7 @@ def test_byte_tokenizer_round_trips_utf8_text() -> None:
 
     token_ids = tokenizer.encode(text)
 
-    assert tokenizer.vocab_size == 256
+    assert tokenizer.vocab_size == 257
     assert all(0 <= token_id < tokenizer.vocab_size for token_id in token_ids)
     assert tokenizer.decode(token_ids) == text
 
