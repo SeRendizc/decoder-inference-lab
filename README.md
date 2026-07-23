@@ -27,7 +27,7 @@ Implemented on `main`:
 - CPU forward, backward, causality, validation, and training tests.
 - CUDA tests for attention, RMSNorm, Transformer blocks, and decoder logits.
 
-The current WSL2/CUDA environment passes all 52 tests and Ruff. KV cache,
+The current WSL2/CUDA environment passes all 54 tests and Ruff. KV cache,
 explicit prefill/decode APIs, attention-kernel comparisons, profiling evidence,
 and inference-performance experiments remain roadmap work.
 
