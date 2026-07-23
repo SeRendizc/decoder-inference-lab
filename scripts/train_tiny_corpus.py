@@ -2,12 +2,12 @@ from __future__ import annotations
 
 import torch
 
-from infermatrix_model_lab.config import ModelConfig
-from infermatrix_model_lab.data import ByteTokenizer, make_next_token_examples
-from infermatrix_model_lab.generation import generate_greedy
-from infermatrix_model_lab.model.decoder import DecoderOnlyTransformer
-from infermatrix_model_lab.training.loss import NextTokenCrossEntropy
-from infermatrix_model_lab.training.overfit import overfit_tiny_batch
+from decoder_inference_lab.config import ModelConfig
+from decoder_inference_lab.data import ByteTokenizer, make_next_token_examples
+from decoder_inference_lab.generation import generate_greedy
+from decoder_inference_lab.model.decoder import DecoderOnlyTransformer
+from decoder_inference_lab.training.loss import NextTokenCrossEntropy
+from decoder_inference_lab.training.overfit import overfit_tiny_batch
 
 
 def main() -> None:

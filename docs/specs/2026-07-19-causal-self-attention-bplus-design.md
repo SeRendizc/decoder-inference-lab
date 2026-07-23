@@ -1,5 +1,7 @@
 # Causal Self-Attention B+ 练习设计
 
+> Historical note: this document predates the rename from InferMatrix Model Lab to Decoder Inference Lab.
+
 ## 目标
 
 用户亲手完成第一版 `CausalSelfAttention`，能够解释从 `[B, T, D]` 到多头布局、注意力分数、causal mask、上下文聚合再回到 `[B, T, D]` 的完整数据流。Codex 提供接口、行为测试、shape 路线卡和代码审查，但不在用户第一次尝试前生成完整核心实现。

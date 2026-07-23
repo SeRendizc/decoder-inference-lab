@@ -5,7 +5,7 @@ import math
 import torch
 from torch import nn
 
-from infermatrix_model_lab.config import ModelConfig
+from decoder_inference_lab.config import ModelConfig
 
 
 KVCache = tuple[torch.Tensor, torch.Tensor]

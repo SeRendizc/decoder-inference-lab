@@ -4,7 +4,7 @@ import torch
 from torch import nn
 from torch.optim import Optimizer
 
-from infermatrix_model_lab.training.step import train_step
+from decoder_inference_lab.training.step import train_step
 
 
 def overfit_tiny_batch(

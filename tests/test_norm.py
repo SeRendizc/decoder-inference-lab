@@ -1,6 +1,6 @@
 import torch
 
-from infermatrix_model_lab.model.norm import RMSNorm
+from decoder_inference_lab.model.norm import RMSNorm
 
 
 def test_rms_norm_preserves_shape_and_fp32_dtype() -> None:

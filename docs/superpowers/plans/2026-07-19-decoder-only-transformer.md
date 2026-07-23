@@ -1,5 +1,7 @@
 # Decoder-Only Transformer Implementation Plan
 
+> Historical note: this document predates the rename from InferMatrix Model Lab to Decoder Inference Lab.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. The core `forward()` remains user-owned for its first implementation.
 
 **Goal:** Build a minimal Decoder-only Transformer that maps token ids `[B,T]` to vocabulary logits `[B,T,V]`.

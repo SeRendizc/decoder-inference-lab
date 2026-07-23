@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 
-from infermatrix_model_lab.generation import generate_greedy
+from decoder_inference_lab.generation import generate_greedy
 
 
 class IncrementModel(nn.Module):

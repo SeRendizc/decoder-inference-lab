@@ -3,10 +3,10 @@ from __future__ import annotations
 import torch
 from torch import nn
 
-from infermatrix_model_lab.config import ModelConfig
-from infermatrix_model_lab.model.attention import CausalSelfAttention
-from infermatrix_model_lab.model.mlp import FeedForward
-from infermatrix_model_lab.model.norm import RMSNorm
+from decoder_inference_lab.config import ModelConfig
+from decoder_inference_lab.model.attention import CausalSelfAttention
+from decoder_inference_lab.model.mlp import FeedForward
+from decoder_inference_lab.model.norm import RMSNorm
 
 
 class TransformerBlock(nn.Module):

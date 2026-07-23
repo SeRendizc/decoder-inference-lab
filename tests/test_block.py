@@ -1,7 +1,7 @@
 import torch
 
-from infermatrix_model_lab.config import ModelConfig
-from infermatrix_model_lab.model.block import TransformerBlock
+from decoder_inference_lab.config import ModelConfig
+from decoder_inference_lab.model.block import TransformerBlock
 
 
 def _config() -> ModelConfig:

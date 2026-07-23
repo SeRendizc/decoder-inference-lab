@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from infermatrix_model_lab.config import ModelConfig, load_model_config
+from decoder_inference_lab.config import ModelConfig, load_model_config
 
 PROJECT_ROOT = Path(__file__).parents[1]
 

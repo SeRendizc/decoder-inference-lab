@@ -1,4 +1,6 @@
 {
+  "project": "decoder-inference-lab",
+  "historical_note": "Captured before the repository rename; executable paths retain the original environment location.",
   "status": "pass",
   "python": {
     "version": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",

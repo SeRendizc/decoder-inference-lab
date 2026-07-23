@@ -1,8 +1,8 @@
 import pytest
 import torch
 
-from infermatrix_model_lab.config import ModelConfig
-from infermatrix_model_lab.model.decoder import DecoderOnlyTransformer
+from decoder_inference_lab.config import ModelConfig
+from decoder_inference_lab.model.decoder import DecoderOnlyTransformer
 
 
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA is not available")

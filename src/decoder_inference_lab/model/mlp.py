@@ -3,7 +3,7 @@ from __future__ import annotations
 import torch
 from torch import nn
 
-from infermatrix_model_lab.config import ModelConfig
+from decoder_inference_lab.config import ModelConfig
 
 
 class FeedForward(nn.Module):

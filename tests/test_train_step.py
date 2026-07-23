@@ -1,9 +1,9 @@
 import torch
 
-from infermatrix_model_lab.config import ModelConfig
-from infermatrix_model_lab.model.decoder import DecoderOnlyTransformer
-from infermatrix_model_lab.training.loss import NextTokenCrossEntropy
-from infermatrix_model_lab.training.step import train_step
+from decoder_inference_lab.config import ModelConfig
+from decoder_inference_lab.model.decoder import DecoderOnlyTransformer
+from decoder_inference_lab.training.loss import NextTokenCrossEntropy
+from decoder_inference_lab.training.step import train_step
 
 
 def _config() -> ModelConfig:

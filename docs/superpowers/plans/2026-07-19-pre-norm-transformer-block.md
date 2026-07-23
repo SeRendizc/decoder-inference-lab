@@ -1,5 +1,7 @@
 # Pre-Norm Transformer Block Implementation Plan
 
+> Historical note: this document predates the rename from InferMatrix Model Lab to Decoder Inference Lab.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Do not delegate or pre-fill the user-owned `forward()` residual logic.
 
 **Goal:** Compose the verified RMSNorm, causal self-attention, and feed-forward modules into one FP32 pre-norm residual Transformer Block.

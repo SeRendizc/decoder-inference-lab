@@ -1,7 +1,7 @@
 import torch
 
-from infermatrix_model_lab.config import ModelConfig
-from infermatrix_model_lab.model.mlp import FeedForward
+from decoder_inference_lab.config import ModelConfig
+from decoder_inference_lab.model.mlp import FeedForward
 
 
 def _make_config(*, dropout: float = 0.0) -> ModelConfig:

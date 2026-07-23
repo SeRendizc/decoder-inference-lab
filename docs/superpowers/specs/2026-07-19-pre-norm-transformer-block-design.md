@@ -1,5 +1,7 @@
 # Pre-Norm Transformer Block Learning Slice Design
 
+> Historical note: this document predates the rename from InferMatrix Model Lab to Decoder Inference Lab.
+
 ## Goal
 
 Combine the user-implemented RMSNorm, causal self-attention, and feed-forward modules into one decoder-only pre-norm residual Transformer Block that the user can implement and explain.

@@ -2,7 +2,7 @@ import pytest
 import torch
 from torch.nn import functional as F
 
-from infermatrix_model_lab.training.loss import NextTokenCrossEntropy
+from decoder_inference_lab.training.loss import NextTokenCrossEntropy
 
 
 def test_next_token_cross_entropy_matches_pytorch_reference() -> None:

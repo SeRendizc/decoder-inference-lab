@@ -1,5 +1,7 @@
 # RMSNorm Learning Slice Design
 
+> Historical note: this document predates the rename from InferMatrix Model Lab to Decoder Inference Lab.
+
 ## Goal
 
 Implement and understand a minimal RMSNorm module for the decoder-only Transformer. The user owns the normalization formula and `forward()` implementation; Codex owns peripheral configuration, tests, and review.

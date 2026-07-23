@@ -112,6 +112,7 @@ def collect_environment(check_compile: bool) -> dict[str, Any]:
     properties = torch.cuda.get_device_properties(0)
 
     return {
+        "project": "decoder-inference-lab",
         "status": "pass",
         "python": {
             "version": sys.version,

@@ -1,5 +1,7 @@
 # Model Lab 四周执行计划
 
+> Historical note: this document predates the rename from InferMatrix Model Lab to Decoder Inference Lab.
+
 ## Goal
 
 用尽可能少的外围工程，完成从 Transformer 正确性、KV Cache 到 PyTorch 推理优化和真实 serving 行为的学习闭环。核心机制必须本人可实现、可测量、可解释。

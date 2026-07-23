@@ -3,9 +3,9 @@ from __future__ import annotations
 import torch
 from torch import nn
 
-from infermatrix_model_lab.config import ModelConfig
-from infermatrix_model_lab.model.block import TransformerBlock
-from infermatrix_model_lab.model.norm import RMSNorm
+from decoder_inference_lab.config import ModelConfig
+from decoder_inference_lab.model.block import TransformerBlock
+from decoder_inference_lab.model.norm import RMSNorm
 
 
 class DecoderOnlyTransformer(nn.Module):

@@ -1,7 +1,7 @@
 import pytest
 import torch
 
-from infermatrix_model_lab.data import ByteTokenizer, make_next_token_examples
+from decoder_inference_lab.data import ByteTokenizer, make_next_token_examples
 
 
 def test_byte_tokenizer_round_trips_utf8_text() -> None:

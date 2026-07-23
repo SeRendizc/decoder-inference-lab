@@ -1,4 +1,4 @@
-from infermatrix_model_lab.data import ByteTokenizer
+from decoder_inference_lab.data import ByteTokenizer
 
 
 def test_byte_tokenizer_reserves_eos_token() -> None:

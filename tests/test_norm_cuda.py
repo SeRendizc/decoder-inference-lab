@@ -1,7 +1,7 @@
 import pytest
 import torch
 
-from infermatrix_model_lab.model.norm import RMSNorm
+from decoder_inference_lab.model.norm import RMSNorm
 
 
 @pytest.mark.skipif(
