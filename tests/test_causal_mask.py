@@ -1,6 +1,6 @@
 import torch
 
-from infermatrix_model_lab.model.attention import (
+from decoder_inference_lab.model.attention import (
     _build_causal_mask,
 )
 

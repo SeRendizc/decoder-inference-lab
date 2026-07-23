@@ -7,7 +7,6 @@ from torch import nn
 
 from decoder_inference_lab.config import ModelConfig
 
-
 KVCache = tuple[torch.Tensor, torch.Tensor]
 
 
