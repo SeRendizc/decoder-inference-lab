@@ -16,6 +16,7 @@ class ModelConfig:
     num_layers: int
     mlp_ratio: int = 4
     dropout: float = 0.0
+    norm_eps: float = 1e-5
 
     def __post_init__(self) -> None:
         positive_dimensions = {
@@ -34,6 +35,8 @@ class ModelConfig:
             raise ValueError("d_model 必须能被 num_heads 整除")
         if not 0.0 <= self.dropout < 1.0:
             raise ValueError("dropout 必须满足 0.0 <= dropout < 1.0")
+        if self.norm_eps <= 0.0:
+            raise ValueError("norm_eps 必须大于 0")
 
     @property
     def head_dim(self) -> int:

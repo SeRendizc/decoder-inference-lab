@@ -1,22 +1,84 @@
-# InferMatrix Model Lab
+# Decoder Inference Lab
 
-面向 AI Infra 学习和实验的最小 PyTorch 仓库。目标不是训练有竞争力的大模型，而是亲手理解 Decoder-only Transformer、KV Cache、prefill/decode 和推理优化，并产生可被 InferMatrix 固化的实验与故障证据。
+A minimal PyTorch lab for learning, verifying, and measuring decoder-only
+Transformer inference mechanisms.
 
-## 当前状态
+The project is intentionally small enough to inspect end to end. Its purpose is
+to build systems understanding of the path from tokens to logits and
+generation, then use that foundation for KV-cache, prefill/decode, profiling,
+and inference-optimization experiments.
 
-- D1：WSL2 GPU/PyTorch 环境通过技术与 Ownership Gate。
-- D2：配置、byte tokenizer、next-token examples、测试和工程骨架已完成技术验收。
-- D3：手写 multi-head causal self-attention 已完成，shape、causal behavior、CPU/CUDA backward 测试通过。
+## Current status
 
-## 环境
+Implemented on `main`:
+
+- Validated YAML model configuration.
+- UTF-8 byte tokenizer with a reserved EOS token.
+- Next-token training-example construction.
+- Multi-head causal self-attention.
+- RMSNorm.
+- Feed-forward MLP.
+- Pre-norm residual Transformer block.
+- Decoder-only Transformer with token and positional embeddings.
+- Greedy generation with EOS and context-length handling.
+- Next-token cross-entropy.
+- Optimizer-backed training step.
+- Tiny-batch overfit loop.
+- CPU forward, backward, causality, validation, and training tests.
+- CUDA tests for attention, RMSNorm, Transformer blocks, and decoder logits.
+
+The current WSL2/CUDA environment passes all 52 tests and Ruff. KV cache,
+explicit prefill/decode APIs, attention-kernel comparisons, profiling evidence,
+and inference-performance experiments remain roadmap work.
+
+## Architecture
+
+```text
+UTF-8 text
+    -> ByteTokenizer
+    -> token ids
+    -> DecoderOnlyTransformer
+       -> token + position embeddings
+       -> repeated pre-norm TransformerBlock
+          -> RMSNorm
+          -> CausalSelfAttention
+          -> residual
+          -> RMSNorm
+          -> FeedForward
+          -> residual
+       -> final RMSNorm
+       -> language-model head
+    -> logits
+    -> greedy generation or next-token loss
+```
+
+The implementations favor clarity and explicit invariants over peak
+performance. Optimized kernels and caching will be added as measured
+comparisons against this readable baseline.
+
+## Environment
+
+The verified development environment is:
 
 - WSL2 Ubuntu 22.04
 - Python 3.10
-- PyTorch 2.12.1 + CUDA 13.0 wheel
-- RTX 3060 Laptop 6GB，compute capability 8.6
-- venv：`/root/.venvs/infermatrix-model-lab`
+- PyTorch 2.12.1 with CUDA 13.0
+- NVIDIA RTX 3060 Laptop GPU
 
-验证环境：
+The repository pins the PyTorch version but does not install a platform-specific
+CUDA wheel index automatically. Select the wheel appropriate for the machine.
+
+## Installation
+
+```bash
+git clone https://github.com/SeRendizc/decoder-inference-lab.git
+cd decoder-inference-lab
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e ".[dev]"
+```
+
+## Verify the environment
 
 ```bash
 python scripts/verify_environment.py \
@@ -24,40 +86,72 @@ python scripts/verify_environment.py \
   --output artifacts/d1_environment.json
 ```
 
-## 目录职责
+The environment report records Python, PyTorch, CUDA, GPU, matrix-multiply,
+backward, and optional `torch.compile` evidence.
 
-| 路径                                    | 职责                                 | Ownership |
-| ------------------------------------- | ---------------------------------- | --------- |
-| `configs/`                            | smoke/lab 超参数，不包含模型逻辑              | P/C       |
-| `src/infermatrix_model_lab/config.py` | YAML 读取、维度约束、`head_dim`            | C         |
-| `src/infermatrix_model_lab/data.py`   | UTF-8 byte tokenizer、next-token 样本 | C         |
-| `src/infermatrix_model_lab/model/`    | attention、block、decoder 核心模型       | U         |
-| `tests/`                              | 正确性与边界条件                           | U/C       |
-| `scripts/`                            | 可重复执行入口                            | C         |
-| `artifacts/`                          | 环境、指标、trace 与证据                    | P/C       |
-| `.planning/`                          | 路线、学习 Gate 与进度                     | P         |
-
-核心模型的 ownership 约束见 [`src/infermatrix_model_lab/model/OWNERSHIP.md`](src/infermatrix_model_lab/model/OWNERSHIP.md)。
-
-## 安装与验证
+## Run tests
 
 ```bash
-python -m pip install -e ".[dev]"
 python -m pytest tests -q
 python -m ruff check .
 ```
 
-## 两级配置
+CUDA tests skip when CUDA is unavailable; a CPU-only pass is not presented as
+CUDA validation.
 
-- `configs/smoke.yaml`：2 layers、`d_model=128`、4 heads，用于秒级 correctness。
-- `configs/lab.yaml`：6 layers、`d_model=384`、6 heads，约 8M～15M 目标区间；最终参数量在模型实现后实测。
+## Run the tiny training experiment
 
-## 当前验证
+```bash
+python scripts/train_tiny_corpus.py --config configs/smoke.yaml
+```
 
-- 14 项 pytest 通过；无 CUDA 的机器会自动跳过 CUDA 专项测试。
-- Ruff 全绿。
-- Attention 保持朴素实现，用于后续与 PyTorch SDPA 对比。
+The script tokenizes a tiny corpus, creates next-token examples, trains the
+decoder, reports loss history, and generates a short continuation. It is a
+correctness and learning experiment, not a claim of useful language-model
+quality.
 
-## 下一步
+## Configuration
 
-实现 normalization、MLP 和 residual decoder block，再进入最小 decoder-only language model。
+Two checked-in configurations serve different purposes:
+
+- `configs/smoke.yaml`: small and fast for correctness checks.
+- `configs/lab.yaml`: larger local experiment configuration.
+
+`ModelConfig` validates positive dimensions, head divisibility, context length,
+dropout, and normalization epsilon before model construction.
+
+## Package structure
+
+```text
+src/decoder_inference_lab/
+|-- model/
+|   |-- attention.py
+|   |-- block.py
+|   |-- decoder.py
+|   |-- mlp.py
+|   `-- norm.py
+|-- training/
+|   |-- loss.py
+|   |-- overfit.py
+|   `-- step.py
+|-- config.py
+|-- data.py
+`-- generation.py
+```
+
+The core-model ownership expectations are documented in
+[`src/decoder_inference_lab/model/OWNERSHIP.md`](src/decoder_inference_lab/model/OWNERSHIP.md).
+
+## Roadmap
+
+The next inference-specific sequence is:
+
+1. Add an explicit KV-cache data model with correctness tests.
+2. Separate prefill and decode execution paths.
+3. Prove cached and uncached generation are semantically equivalent.
+4. Profile latency, memory, and kernel behavior with reproducible configs.
+5. Compare the readable attention baseline with PyTorch SDPA and later
+   specialized kernels.
+
+Each optimization should preserve a correctness oracle and produce evidence
+that can be consumed by the broader Reliable Agentic LLM Systems portfolio.

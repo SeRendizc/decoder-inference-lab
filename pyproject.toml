@@ -3,9 +3,9 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "infermatrix-model-lab"
+name = "decoder-inference-lab"
 version = "0.1.0"
-description = "Minimal PyTorch lab for learning and measuring LLM inference mechanisms"
+description = "Decoder-only Transformer learning and inference measurement lab"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
@@ -33,4 +33,3 @@ target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
-

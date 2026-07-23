@@ -1,5 +1,7 @@
 # Model Lab 学习门禁
 
+> Historical note: this document predates the rename from InferMatrix Model Lab to Decoder Inference Lab.
+
 ## Gate A｜Transformer
 
 本人必须能回答：

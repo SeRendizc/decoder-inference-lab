@@ -1,5 +1,7 @@
 # Causal Self-Attention B+ Implementation Plan
 
+> Historical note: this document predates the rename from InferMatrix Model Lab to Decoder Inference Lab.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to execute this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking. Core Attention implementation remains user-owned by explicit agreement.
 
 **Goal:** 为用户亲手实现 `CausalSelfAttention` 准备精确接口、失败测试、shape 路线和验证闭环，同时避免 Codex 提前生成核心答案。

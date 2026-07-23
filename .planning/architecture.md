@@ -1,5 +1,7 @@
 # Model Lab 计划架构
 
+> Historical note: this document predates the rename from InferMatrix Model Lab to Decoder Inference Lab.
+
 ## 1. 目录设计
 
 ```text
