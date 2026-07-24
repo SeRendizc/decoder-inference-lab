@@ -72,52 +72,51 @@ class CausalSelfAttention(nn.Module):
         batch_size, query_length, _ = x.shape
 
         query = self.q_proj(x)
-        key = self.k_proj(x)
-        value = self.v_proj(x)
+        new_key = self.k_proj(x)
+        new_value = self.v_proj(x)
 
         query = query.view(
             batch_size,
             query_length,
             self.num_heads,
             self.head_dim,
-        )
-        query = query.transpose(1, 2)
+        ).transpose(1, 2)
 
-        key = key.view(
+        new_key = new_key.view(
             batch_size,
             query_length,
             self.num_heads,
             self.head_dim,
-        )
-        key = key.transpose(1, 2)
+        ).transpose(1, 2)
 
-        value = value.view(
+        new_value = new_value.view(
             batch_size,
             query_length,
             self.num_heads,
             self.head_dim,
-        )
-        value = value.transpose(1, 2)
+        ).transpose(1, 2)
 
-        # query/key/value: [B, H, Q, Dₕ]
+        # query/new_key/new_value: [B, H, Q, Dₕ]
 
         if past_key_value is None:
             past_length = 0
+            key = new_key
+            value = new_value
         else:
             past_key, past_value = past_key_value
-            past_length = past_key.size(2)
+            past_length = past_key.shape[2]
 
             key = torch.cat(
-                [past_key, key],
+                [past_key, new_key],
                 dim=2,
             )
             value = torch.cat(
-                [past_value, value],
+                [past_value, new_value],
                 dim=2,
             )
 
         # key/value: [B, H, K, Dₕ]
-        key_length = key.size(2)
+        key_length = key.shape[2]
 
         causal_mask = _build_causal_mask(
             query_length=query_length,
@@ -131,7 +130,6 @@ class CausalSelfAttention(nn.Module):
 
         scores = query @ key.transpose(-2, -1)
         # scores: [B, H, Q, K]
-
         scores = scores / math.sqrt(self.head_dim)
 
         scores = scores.masked_fill(
@@ -139,10 +137,7 @@ class CausalSelfAttention(nn.Module):
             float("-inf"),
         )
 
-        weights = torch.softmax(
-            scores,
-            dim=-1,
-        )
+        weights = torch.softmax(scores, dim=-1)
 
         context = weights @ value
         # context: [B, H, Q, Dₕ]

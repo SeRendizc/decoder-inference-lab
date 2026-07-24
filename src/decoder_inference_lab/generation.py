@@ -33,10 +33,7 @@ def generate_greedy(
                 dim=1,
             )
 
-            if (
-                eos_token_id is not None
-                and torch.all(next_token == eos_token_id)
-            ):
+            if eos_token_id is not None and torch.all(next_token == eos_token_id):
                 break
 
     return generated
